@@ -3,9 +3,24 @@
 
 #Path to your oh-my-zsh installation.
 export ZSH="/Users/devstein/.oh-my-zsh"
-export EDITOR=vim
+export EDITOR=nvim
 
- #Set name of the theme to load --- if set to "random", it will
+
+export GITHUB_USERNAME=devstein
+
+export LDFLAGS="-L/usr/local/opt/readline/lib"
+export CPPFLAGS="-I/usr/local/opt/readline/include"
+export PKG_CONFIG_PATH="/usr/local/opt/readline/lib/pkgconfig"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# inetutils (ftp)
+
+export PATH="/usr/local/opt/inetutils/libexec/gnubin:$PATH"
+
+#Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -40,7 +55,7 @@ ZSH_THEME="robbyrussell"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -65,9 +80,19 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  docker
+  kubectl
+# https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
+  zsh-autosuggestions
+# https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
+  zsh-syntax-highlighting
+  z
 )
 
 source $ZSH/oh-my-zsh.sh
+
+# Kubernetes CLI Helepr 
+if [ $commands[kubectl] ]; then source <(kubectl completion zsh); fi >> ~/.zshrc # add autocomplete permanently to your zsh shell
 
 # User configuration
 
@@ -101,26 +126,66 @@ source $ZSH/oh-my-zsh.sh
 alias vi="nvim"
 alias vim="nvim"
 
+
+# Python aliases
+alias python="python3"
+
+# Kubernetes Alias
+alias k=kubectl
+
+# Argo alias
+alias al="argo list"
+alias alr="argo list --status Running"
+alias als="argo list --status Succeeded"
+alias alf="argo list --status Failed"
+
 # Git aliases
+
 # clean up all local branches except master
 alias gbc="git branch | grep -v "master" | xargs git branch -D"
-alias pr="hub pull-request -r yasyf,tinazheng -a devstein -l 'please code review' -o"
+alias pr="hub pull-request -r jpugliesi -a devstein -l 'please code review' -o"
 alias gc="git checkout "
+alias gs="git status"
 
 # yarn/node alias
 alias yys="yarn && yarn start"
 
+# Viaduct aliases
+alias code="cd $CODE"
+alias pipenv_init="pipenv install --python 3.6.8"
 
 # rebind alt + arrow
-bindkey "^[[1;9C" forward-word
-bindkey "^[[1;9D" backward-word
+# 2018 MacbookPro 13in
+# bindkey "^[[1;9C" forward-word
+# bindkey "^[[1;9D" backward-word
+
+# 2018 MacbookPro 15in
+bindkey "[C" forward-word
+bindkey "[D" backward-word
+
 
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+
+# Paths
+export PATH=/usr/local/bin:$PATH
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
+# Go Configuration
+export PATH=$PATH:/usr/local/go/bin
+export GO111MODULE=on
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# pyenv init
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
