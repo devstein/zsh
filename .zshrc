@@ -148,6 +148,8 @@ alias gc="git checkout "
 alias gs="git status"
 
 # yarn/node alias
+alias y="yarn"
+alias ys="yarn start"
 alias yys="yarn && yarn start"
 
 # Viaduct aliases
@@ -165,10 +167,14 @@ bindkey "[D" backward-word
 
 
 
+# Load NVIM 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# GCloud 
+source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 
 # Paths
 export PATH=/usr/local/bin:$PATH
@@ -189,3 +195,9 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+# Ruby Config
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+
+export LDFLAGS="-L/usr/local/opt/ruby/lib"
+export CPPFLAGS="-I/usr/local/opt/ruby/include"
