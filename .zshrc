@@ -4,6 +4,7 @@
 #Path to your oh-my-zsh installation.
 export ZSH="/Users/devstein/.oh-my-zsh"
 export EDITOR=nvim
+export CODE="$HOME/Documents/code"
 
 
 export GITHUB_USERNAME=devstein
@@ -15,10 +16,14 @@ export PKG_CONFIG_PATH="/usr/local/opt/readline/lib/pkgconfig"
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+# For youcompleteme
+export PYTHON_CONFIGURE_OPTS="--enable-framework"
 
 # inetutils (ftp)
 
 export PATH="/usr/local/opt/inetutils/libexec/gnubin:$PATH"
+
+export XDG_CONFIG_HOME="$HOME/.config"
 
 #Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -86,7 +91,7 @@ plugins=(
   zsh-autosuggestions
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
   zsh-syntax-highlighting
-  z
+  jsontools
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -126,9 +131,10 @@ if [ $commands[kubectl] ]; then source <(kubectl completion zsh); fi >> ~/.zshrc
 alias vi="nvim"
 alias vim="nvim"
 
-
+alias G=" | grep -i "
 # Python aliases
 alias python="python3"
+export PATH=$PATH:$HOME/miniconda3/bin
 
 # Kubernetes Alias
 alias k=kubectl
@@ -179,6 +185,7 @@ source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 # Paths
 export PATH=/usr/local/bin:$PATH
 
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
@@ -201,3 +208,5 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 
 export LDFLAGS="-L/usr/local/opt/ruby/lib"
 export CPPFLAGS="-I/usr/local/opt/ruby/include"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
