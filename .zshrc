@@ -25,6 +25,8 @@ export PATH="/usr/local/opt/inetutils/libexec/gnubin:$PATH"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 
+export PGDATA="$HOME/psql/data"
+
 #Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -149,9 +151,13 @@ alias alf="argo list --status Failed"
 
 # clean up all local branches except master
 alias gbc="git branch | grep -v "master" | xargs git branch -D"
-alias pr="hub pull-request -r jpugliesi -a devstein -l 'please code review' -o"
+alias pr="hub pull-request -r jpugliesi,nikicc -a devstein -l 'please code review' -o"
 alias gc="git checkout "
 alias gs="git status"
+alias gcmp="git checkout master && git pull"
+
+# pretty view of git branches, ordered by edit date
+alias gb='git for-each-ref --sort=committerdate refs/heads/ --format="%(HEAD)%(color:blue)%(refname:short)%(color:reset) -%(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname)(%(color:green)%(committerdate:relative)%(color:reset))"'
 
 # yarn/node alias
 alias y="yarn"
@@ -160,7 +166,6 @@ alias yys="yarn && yarn start"
 
 # Viaduct aliases
 alias code="cd $CODE"
-alias pipenv_init="pipenv install --python 3.6.8"
 
 # rebind alt + arrow
 # 2018 MacbookPro 13in
@@ -179,8 +184,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # GCloud 
-source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
-source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+# source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+# source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 
 # Paths
 export PATH=/usr/local/bin:$PATH
@@ -209,4 +214,23 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/ruby/lib"
 export CPPFLAGS="-I/usr/local/opt/ruby/include"
 
+function k_restart() {
+  kubectl -n $1 rollout restart deployment $2
+}
+alias kpsql="kubectl run psql-$USER -i --tty --rm=true --restart=Never --image=postgres --command -- /bin/bash"
+alias kredis="kubectl run redis-cli-$USER -i --tty --rm=true --restart=Never --image=redis --command -- /bin/bash"
+
+function kcurl() {
+  kubectl run -i --rm --restart=Never curl-$USER --image=dockerqa/curl:ubuntu-trusty --command -- curl $@
+}
+
+# Kubectl pluginmanager
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# Rust
+source "$HOME/.cargo/env"
