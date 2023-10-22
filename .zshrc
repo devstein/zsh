@@ -2,9 +2,9 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 #Path to your oh-my-zsh installation.
-export ZSH="/Users/devstein/.oh-my-zsh"
 export EDITOR=nvim
 export CODE="$HOME/Documents/code"
+export ZSH="$HOME/.oh-my-zsh"
 
 
 export GITHUB_USERNAME=devstein
@@ -141,20 +141,14 @@ export PATH=$PATH:$HOME/miniconda3/bin
 # Kubernetes Alias
 alias k=kubectl
 
-# Argo alias
-alias al="argo list"
-alias alr="argo list --status Running"
-alias als="argo list --status Succeeded"
-alias alf="argo list --status Failed"
-
 # Git aliases
 
-# clean up all local branches except master
-alias gbc="git branch | grep -v "master" | xargs git branch -D"
-alias pr="hub pull-request -r jpugliesi,nikicc -a devstein -l 'please code review' -o"
+# clean up all local branches except main
+alias gbc="git branch | grep -v "main" | xargs git branch -D"
+alias pr="gh pr create -l 'please code review' -a @me"
 alias gc="git checkout "
 alias gs="git status"
-alias gcmp="git checkout master && git pull"
+alias gcmp="git checkout main && git pull"
 
 # pretty view of git branches, ordered by edit date
 alias gb='git for-each-ref --sort=committerdate refs/heads/ --format="%(HEAD)%(color:blue)%(refname:short)%(color:reset) -%(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname)(%(color:green)%(committerdate:relative)%(color:reset))"'
@@ -175,7 +169,6 @@ alias code="cd $CODE"
 # 2018 MacbookPro 15in
 bindkey "[C" forward-word
 bindkey "[D" backward-word
-
 
 
 # Load NVIM 
@@ -234,3 +227,64 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # Rust
 source "$HOME/.cargo/env"
+
+# Deno
+
+export DENO_INSTALL="/Users/devinstein/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+# Postgres 15
+export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
+
+# Github Co Pilot CLI
+copilot_what-the-shell () {
+  TMPFILE=$(mktemp);
+  trap 'rm -f $TMPFILE' EXIT;
+  if /usr/local/bin/github-copilot-cli what-the-shell "$@" --shellout $TMPFILE; then
+    if [ -e "$TMPFILE" ]; then
+      FIXED_CMD=$(cat $TMPFILE);
+      print -s "$FIXED_CMD";
+      eval "$FIXED_CMD"
+    else
+      echo "Apologies! Extracting command failed"
+    fi
+  else
+    return 1
+  fi
+};
+alias '??'='copilot_what-the-shell';
+
+copilot_git-assist () {
+  TMPFILE=$(mktemp);
+  trap 'rm -f $TMPFILE' EXIT;
+  if /usr/local/bin/github-copilot-cli git-assist "$@" --shellout $TMPFILE; then
+    if [ -e "$TMPFILE" ]; then
+      FIXED_CMD=$(cat $TMPFILE);
+      print -s "$FIXED_CMD";
+      eval "$FIXED_CMD"
+    else
+      echo "Apologies! Extracting command failed"
+    fi
+  else
+    return 1
+  fi
+};
+alias 'git?'='copilot_git-assist';
+
+copilot_gh-assist () {
+  TMPFILE=$(mktemp);
+  trap 'rm -f $TMPFILE' EXIT;
+  if /usr/local/bin/github-copilot-cli gh-assist "$@" --shellout $TMPFILE; then
+    if [ -e "$TMPFILE" ]; then
+      FIXED_CMD=$(cat $TMPFILE);
+      print -s "$FIXED_CMD";
+      eval "$FIXED_CMD"
+    else
+      echo "Apologies! Extracting command failed"
+    fi
+  else
+    return 1
+  fi
+};
+alias 'gh?'='copilot_gh-assist';
+alias 'wts'='copilot_what-the-shell'
